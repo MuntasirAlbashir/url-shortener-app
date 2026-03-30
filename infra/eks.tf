@@ -1,5 +1,5 @@
 resource "aws_eks_cluster" "eks" {
-  name = "eks-compute-server"
+  name = "eks-cluster"
 
   access_config {
     authentication_mode = "API"
@@ -15,6 +15,14 @@ resource "aws_eks_cluster" "eks" {
   vpc_config {
     subnet_ids = aws_subnet.private[*].id
   }
+
+  enabled_cluster_log_types = [
+    "api",
+    "audit",
+    "authenticator",
+    "controllerManager",
+    "scheduler",
+  ]
 
   depends_on = [
     aws_iam_role_policy_attachment.cluster_policy,

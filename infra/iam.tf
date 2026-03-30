@@ -1,5 +1,5 @@
 resource "aws_iam_role" "cluster" {
-  name = "eks-cluster-example"
+  name = "eks-cluster-role"
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
@@ -18,7 +18,7 @@ resource "aws_iam_role" "cluster" {
 }
 
 resource "aws_iam_role" "worker" {
-  name = "eks-node-group-example"
+  name = "eks-worker-role"
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
     Statement = [{
