@@ -45,8 +45,8 @@ resource "aws_subnet" "private" {
   vpc_id                                         = aws_vpc.main.id
   availability_zone                              = data.aws_availability_zones.available.names[count.index]
   ipv6_cidr_block                                = cidrsubnet(aws_vpc.main.ipv6_cidr_block, 8, count.index + 3)
+  cidr_block                                     = cidrsubnet(var.vpc_cidr, 8, count.index + 3)
   assign_ipv6_address_on_creation                = true
-  ipv6_native                                    = true
   enable_dns64                                   = true
   enable_resource_name_dns_aaaa_record_on_launch = true
 
