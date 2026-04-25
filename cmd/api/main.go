@@ -1,10 +1,16 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"log"
+	"net/http"
+)
 
-func StartWebServer() string {
-	return fmt.Sprint("Server started")
+func handler(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintf(w, "server start")
 }
-func main() {
 
+func main() {
+	http.HandleFunc("/", handler)
+	log.Fatal(http.ListenAndServe(":8000", nil))
 }
