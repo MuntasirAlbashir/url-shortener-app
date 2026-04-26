@@ -5,7 +5,8 @@ import (
 )
 
 type URL struct {
-	Key string
+	Key   string
+	Value string
 }
 
 type URLService interface {
