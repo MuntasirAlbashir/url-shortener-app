@@ -9,8 +9,12 @@ type URL struct {
 	Value string
 }
 
+type URLRequest struct {
+	Value string
+}
+
 type URLService interface {
-	Register(url URL) (urlKey string, err error)
+	Register(url URLRequest) (urlKey string, err error)
 }
 
 type UrlServer struct {
@@ -25,7 +29,12 @@ func NewUrlServer(service URLService) *UrlServer {
 
 func (u *UrlServer) RegisterURL(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
-	urlKey, err := u.service.Register(URL{Key: r.URL.Query().Get("key")})
+	value := r.URL.Query().Get("value")
+	if value == "" {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+	urlKey, err := u.service.Register(URLRequest{Value: value})
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
