@@ -1,7 +1,13 @@
 package main
 
+import (
+	"crypto/sha256"
+	"encoding/hex"
+	"errors"
+)
+
 type RedisClient interface {
-	Set(key string, value string) string
+	Set(key string, value string) bool
 }
 
 type RedisService struct {
@@ -14,7 +20,12 @@ func NewRedisService(client RedisClient) *RedisService {
 	}
 }
 
-func (r *RedisService) Register(url URL) (urlKey string, err error) {
-	uuid := r.client.Set(url.Key, url.Value)
-	return uuid, nil
+func (r *RedisService) Register(url URLRequest) (urlKey string, err error) {
+	sha := sha256.Sum256([]byte(url.Value))
+	shaString := hex.EncodeToString(sha[:])
+	ok := r.client.Set(shaString, url.Value)
+	if !ok {
+		return "", errors.New("failed to store url in datastore")
+	}
+	return shaString, nil
 }
